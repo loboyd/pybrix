@@ -2,7 +2,7 @@
 
 2018.08.20  --  L. Boyd"""
 
-GRID_SIZE = 40
+GRID_SIZE = 40  # pixels in one grid block
 
 COLORS = [
     ( 16, 193, 229),  # light blue 1x4     (working)

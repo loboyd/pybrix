@@ -5,9 +5,8 @@
 import numpy as np
 import pygame
 
-import settings
-
-GRID_SIZE = 40  # pixels for side length of one block
+import display
+from settings import GRID_SIZE, COLORS
 
 # other blocks relative to `position` block
 BLOCKS = [
@@ -23,8 +22,6 @@ BLOCKS = [
 for i in range(len(BLOCKS)):
     blocks = BLOCKS[i]
     BLOCKS[i] = tuple([np.array(i) for i in blocks])
-
-COLORS = settings.COLORS
 
 # translation from position reference block to rotational center
 ROTATION_POINT = [
@@ -79,16 +76,16 @@ class Tetromino(object):
     def draw(self, screen):
         blocks = self.get_block_positions()
         for block in blocks:
-            draw_block(screen, block, COLORS[self.shape])
+            display.draw_block(screen, block, COLORS[self.shape])
 
 
-def draw_block(screen, position, color):
-    """draw single square to the screen"""
-    row = GRID_SIZE*position[0]
-    col = GRID_SIZE*position[1]
-    white = (255,255,255)
-    pygame.draw.rect(screen, white, pygame.Rect(row,col,40,40))
-    pygame.draw.rect(screen, color, pygame.Rect(row+2,col+2,36,36))
+# def draw_block(screen, position, color):
+#     """draw single square to the screen"""
+#     row = GRID_SIZE*position[0]
+#     col = GRID_SIZE*position[1]
+#     white = (255,255,255)
+#     pygame.draw.rect(screen, white, pygame.Rect(row,col,40,40))
+#     pygame.draw.rect(screen, color, pygame.Rect(row+2,col+2,36,36))
 
 def rotate_blocks(blocks,r):
     """rotates a set of points in 2D space by r*90 degrees"""
