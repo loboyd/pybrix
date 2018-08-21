@@ -11,7 +11,7 @@ from settings import GRID_SIZE, COLORS
 class Board(object):
     def __init__(self,shape=(20,10)):
         self.shape = shape
-        self.grid = np.array(self.shape)
+        self.grid = -1*np.ones(self.shape)
 
     def draw(self, screen):
         """draw board not including currently falling tetromino"""
@@ -19,5 +19,6 @@ class Board(object):
             for j in self.shape[1]:
                 position = ()
                 color = COLORS[self.grid[i,j]]
-                display.draw_block(screen, position, color)
+                if color > -1:
+                    display.draw_block(screen, position, color)
 
