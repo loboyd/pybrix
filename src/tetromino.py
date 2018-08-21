@@ -1,11 +1,16 @@
+"""Tetromino class for pybrix
+
+2018.08.19  --  L. Boyd"""
+
 import numpy as np
 import pygame
+
+import settings
 
 GRID_SIZE = 40  # pixels for side length of one block
 
 # other blocks relative to `position` block
 BLOCKS = [
-    # 1x4
     ((-1., 0.), (0.,0.), ( 1., 0.), (2., 0.)), # 1x4
     ((-1., 0.), (0.,0.), ( 0.,-1.), (1.,-1.)), # S
     ((-1.,-1.), (0.,0.), ( 0.,-1.), (1., 0.)), # S'
@@ -19,15 +24,7 @@ for i in range(len(BLOCKS)):
     blocks = BLOCKS[i]
     BLOCKS[i] = tuple([np.array(i) for i in blocks])
 
-COLORS = [
-    ( 16, 193, 229),  # light blue 1x4     (working)
-    ( 15, 210,  44),  # green      S       (working)
-    (205,  10,  10),  # red        S'      (working)
-    (255, 176,   5),  # orange     L       (working)
-    (  1,   8, 208),  # blue       L'      (working)
-    (118,   1, 208),  # purple     T       (working)
-    (223, 197,   1)   # yellwo     square  (working)
-]
+COLORS = settings.COLORS
 
 # translation from position reference block to rotational center
 ROTATION_POINT = [
@@ -60,15 +57,20 @@ class Tetromino(object):
 
         # translate so rotational center and position reference
         # are the same
-        blocks = [ROTATION_POINT[self.shape] + i for i in blocks]
+        blocks = [i + ROTATION_POINT[self.shape] for i in blocks]
 
         # rotate blocks to correct orientation
         blocks = rotate_blocks(blocks, self.orientation)
 
         # undo translation from above
-        blocks = [ROTATION_POINT[self.shape] - i for i in blocks]
+        blocks = [i - ROTATION_POINT[self.shape] for i in blocks]
 
         return [self.position + i for i in blocks]
+
+    def translate(self, direction=1):
+        """TODO: perform boundary check"""
+        t = 1 if direction else -1
+        self.position = (self.position[0]+t, self.position[1])
 
     def rotate(self,ccw=False):
         t = -1 if ccw else 1
@@ -78,6 +80,7 @@ class Tetromino(object):
         blocks = self.get_block_positions()
         for block in blocks:
             draw_block(screen, block, COLORS[self.shape])
+
 
 def draw_block(screen, position, color):
     """draw single square to the screen"""
