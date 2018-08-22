@@ -36,20 +36,23 @@ ROTATION_POINT = [
 
 
 class Tetromino(object):
-    def __init__(self, shape, board, orientation=0, position=(0,5)):
+    def __init__(self, shape, board, screen, orientation=0, position=(0,5)):
         self.shape = shape
         self.board = board
+        self.screen = screen
         self.orientation = orientation
         self.position = position
         self.board_collision = False
+        self.is_drawn = False
 
     def drop(self):
         """advance tetromino by one row
         TODO: include check for hitting existing Tetrominos"""
+        self.undraw()
         self.position = (self.position[0], self.position[1]+1)
         # check for board collisions
         # undo drop if found
-        if self.board_collsision:
+        if self.board_collision:
             self.position = (self.position[0], self.position[1]-1)
             return False
         return True
@@ -61,18 +64,19 @@ class Tetromino(object):
 
         # translate so rotational center and position reference
         # are the same
-        blocks = [i + ROTATION_POINT[self.shape] for i in blocks]
+        blocks = [i - ROTATION_POINT[self.shape] for i in blocks]
 
         # rotate blocks to correct orientation
         blocks = rotate_blocks(blocks, self.orientation)
 
         # undo translation from above
-        blocks = [i - ROTATION_POINT[self.shape] for i in blocks]
+        blocks = [i + ROTATION_POINT[self.shape] for i in blocks]
 
         return [self.position + i for i in blocks]
 
     def translate(self, direction=1):
         """TODO: perform boundary check"""
+        self.undraw()
         t = 1 if direction else -1
         self.position = (self.position[0]+t, self.position[1])
         # check for board collisions
@@ -83,13 +87,23 @@ class Tetromino(object):
         return True
 
     def rotate(self,ccw=False):
+        self.undraw()
         t = -1 if ccw else 1
-        self.orientation = (self.oreintation+t) % 4
+        self.orientation = (self.orientation+t) % 4
 
-    def draw(self, screen):
+    def draw(self):
         blocks = self.get_block_positions()
+        color = COLORS[self.shape]
         for block in blocks:
-            display.draw_block(screen, block, COLORS[self.shape])
+            display.draw_block(self.screen, block, color, border=True)
+        self.is_drawn = True
+
+    def undraw(self):
+        if self.is_drawn:
+            blocks = self.get_block_positions()
+            for block in blocks:
+                display.draw_block(self.screen, block, (0,0,0))
+            self.is_drawn = False
 
     def check_board_collision(self):
         blocks = self.get_block_positions
@@ -115,7 +129,7 @@ def rotate_blocks(blocks,r):
         if r == 1:
             blocks[i] = (-block[1], block[0])
         elif r == 2:
-            blocks[i] = (-block[0], block[1])
+            blocks[i] = (-block[0], -block[1])
         elif r == 3:
             blocks[i] = (block[1],-block[0])
     return blocks

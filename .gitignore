@@ -1,3 +1,4 @@
 *.pyc
 src/test.py
+src/main.py
 *.swp
