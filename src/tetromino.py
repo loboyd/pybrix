@@ -36,15 +36,22 @@ ROTATION_POINT = [
 
 
 class Tetromino(object):
-    def __init__(self, shape, orientation=0, position=(0,5)):
+    def __init__(self, shape, board, orientation=0, position=(0,5)):
         self.shape = shape
+        self.board = board
         self.orientation = orientation
         self.position = position
+        self.board_collision = False
 
-    def drop(self, board):
+    def drop(self):
         """advance tetromino by one row
         TODO: include check for hitting existing Tetrominos"""
-        self.position = (self.position[0]+1, self.position[1])
+        self.position = (self.position[0], self.position[1]+1)
+        # check for board collisions
+        # undo drop if found
+        if self.board_collsision:
+            self.position = (self.position[0], self.position[1]-1)
+            return False
         return True
 
     def get_block_positions(self):
@@ -68,6 +75,12 @@ class Tetromino(object):
         """TODO: perform boundary check"""
         t = 1 if direction else -1
         self.position = (self.position[0]+t, self.position[1])
+        # check for board collisions
+        # if found, undo translation
+        if self.board_collision:
+            self.position = (self.position[0]-t, self.position[1])
+            return False
+        return True
 
     def rotate(self,ccw=False):
         t = -1 if ccw else 1
@@ -78,14 +91,18 @@ class Tetromino(object):
         for block in blocks:
             display.draw_block(screen, block, COLORS[self.shape])
 
+    def check_board_collision(self):
+        blocks = self.get_block_positions
+        for block in blocks:
+            u,v = block
+            if u < 0 or u > self.board.shape[0]:
+                self.board_collision = True
+            elif v < 0 or u > self.board.shape[1]:
+                self.board_collision = True
+            elif self.board[u,v] != -1:
+                self.board_collision = True
+        return board_collision
 
-# def draw_block(screen, position, color):
-#     """draw single square to the screen"""
-#     row = GRID_SIZE*position[0]
-#     col = GRID_SIZE*position[1]
-#     white = (255,255,255)
-#     pygame.draw.rect(screen, white, pygame.Rect(row,col,40,40))
-#     pygame.draw.rect(screen, color, pygame.Rect(row+2,col+2,36,36))
 
 def rotate_blocks(blocks,r):
     """rotates a set of points in 2D space by r*90 degrees"""

@@ -13,3 +13,6 @@ COLORS = [
     (118,   1, 208),  # purple     T       (working)
     (223, 197,   1)   # yellwo     square  (working)
 ]
+
+BOARD_SIZE = (20, 10)
+
