@@ -11,7 +11,8 @@ COLORS = [
     (255, 176,   5),  # orange     L       (working)
     (  1,   8, 208),  # blue       L'      (working)
     (118,   1, 208),  # purple     T       (working)
-    (223, 197,   1)   # yellwo     square  (working)
+    (223, 197,   1),  # yellow     square  (working)
+    (  0,   0,   0)   # black      background
 ]
 
 BOARD_SIZE = (20, 10)

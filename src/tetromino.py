@@ -36,7 +36,7 @@ ROTATION_POINT = [
 
 
 class Tetromino(object):
-    def __init__(self, shape, board, screen, orientation=0, position=(0,5)):
+    def __init__(self, shape, board, screen, orientation=0, position=(5,-1)):
         self.shape = shape
         self.board = board
         self.screen = screen
@@ -80,7 +80,10 @@ class Tetromino(object):
         t = 1 if direction else -1
         self.position = (self.position[0]+t, self.position[1])
         # check for board collisions
+        self.check_board_collision()
         # if found, undo translation
+        f = open("testing.out","a")
+        f.write("translate")
         if self.board_collision:
             self.position = (self.position[0]-t, self.position[1])
             return False
@@ -106,14 +109,16 @@ class Tetromino(object):
             self.is_drawn = False
 
     def check_board_collision(self):
-        blocks = self.get_block_positions
+        blocks = self.get_block_positions()
+        f = open("testing.out","a")
+        f.write(str(blocks))
         for block in blocks:
             u,v = block
             if u < 0 or u > self.board.shape[0]:
                 self.board_collision = True
             elif v < 0 or u > self.board.shape[1]:
                 self.board_collision = True
-            elif self.board[u,v] != -1:
+            elif self.board.grid[u, v] != -1:
                 self.board_collision = True
         return board_collision
 
