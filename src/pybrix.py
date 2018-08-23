@@ -6,7 +6,7 @@ import pygame
 import sys
 import os
 import tetromino as tet
-from random import sample
+from random import randint
 
 # add src to path before import pybrix stuff
 cwd = os.getcwd()[:-4]
@@ -89,7 +89,7 @@ def state_init():   # Should start game: display empty board, reset score, show 
     return;
 
 def push_upcoming_tet(upcoming_tets, board, screen):
-    r = sample([0,1,2,3,4,5,6],1)[0]
+    r = randint(0,6)
     upcoming_tets.append(tet.Tetromino(r, board, screen))
     return r;
 
@@ -106,7 +106,10 @@ def state_newpiece():   # Should place random new piece above top row of board, 
     return;
 
 def pop_upcoming_tet(upcoming_tets):
-    return upcoming_tets.pop(0);
+    f = open("testing.out","a")
+    s = upcoming_tets.pop(0)
+    f.write("\n"+str(s.shape))
+    return s;
 
 def state_movedown():   # Should move active piece down one row
     global current_state
@@ -118,6 +121,8 @@ def state_movedown():   # Should move active piece down one row
         current_state+=1
     else:
         current_state = state.NEWPIECE
+        active_tet.add_to_board()
+        b.draw()
     return;
 
 def state_motion():     # Should respond to user instructions: translate, rotate, drop pieces
@@ -138,8 +143,10 @@ def state_motion():     # Should respond to user instructions: translate, rotate
                 active_tet.rotate(1)
             elif event.type == pygame.KEYDOWN and event.key == pygame.K_x:
                 active_tet.rotate(0)
-            elif event.type == pygame.KEYDOWN and event.key == pygame.K_SPACE:
+            elif event.type == pygame.KEYDOWN and event.key == pygame.K_DOWN:
                 active_tet.drop()
+            elif event.type == pygame.KEYDOWN and event.key == pygame.K_SPACE:
+                active_tet.droppp()
                 #current_state = state.CLEARROWS
             b.draw()
             active_tet.draw()

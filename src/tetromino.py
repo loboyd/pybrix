@@ -59,6 +59,19 @@ class Tetromino(object):
             return False
         return True
 
+    def droppp(self):
+        """advance tetromino by all rows"""
+        self.undraw()
+        while 1:
+            self.position = (self.position[0], self.position[1]+1)
+            # check for board collisions
+            self.check_board_collision()
+            # undo drop if found
+            if self.board_collision:
+                self.position = (self.position[0], self.position[1]-1)
+                self.board_collision = False
+                return False
+
     def get_block_positions(self):
         """returns a list of all board locations used by a tetromino
         NOT COMPLETED"""
@@ -84,8 +97,6 @@ class Tetromino(object):
         # check for board collisions
         self.check_board_collision()
         # if found, undo translation
-        f = open("testing.out","a")
-        f.write("translate")
         if self.board_collision:
             self.position = (self.position[0]-t, self.position[1])
             self.board_collision = False
@@ -119,12 +130,9 @@ class Tetromino(object):
 
     def check_board_collision(self):
         blocks = self.get_block_positions()
-        f = open("testing.out","a")
-        f.write(str(self.board.shape[0]))
         for block in blocks:
             u,v = map(int,block)
-            ushift = 3
-            f.write("\n"+str(u)+ " " + str(v))
+            ushift = 3  
             if u < ushift or u >= (self.board.shape[1]+ushift):
                 self.board_collision = True
             elif v >= self.board.shape[0]:
@@ -132,6 +140,15 @@ class Tetromino(object):
             elif self.board.grid[v,u-ushift] != -1:
                 self.board_collision = True
         return self.board_collision
+
+    def add_to_board(self):
+        blocks = self.get_block_positions()
+        ushift = 3
+        for block in blocks:
+            u,v = map(int,block)
+            self.board.grid[v,u-ushift] = self.shape
+        return;
+            
 
 
 def rotate_blocks(blocks,r):
