@@ -23,7 +23,7 @@ def init():
     pygame.init()
     pygame.font.init()
     f = open("testing.out", "w")
-    f.write("123")
+    #f.write("123")
 
 def main():
     init()

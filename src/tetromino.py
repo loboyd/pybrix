@@ -111,16 +111,17 @@ class Tetromino(object):
     def check_board_collision(self):
         blocks = self.get_block_positions()
         f = open("testing.out","a")
-        f.write(str(blocks))
         for block in blocks:
-            u,v = block
+            u,v = map(int,block)
+            f.write("\n")
+            f.write(str(u)+" " + str(v))
             if u < 0 or u > self.board.shape[0]:
                 self.board_collision = True
             elif v < 0 or u > self.board.shape[1]:
                 self.board_collision = True
-            elif self.board.grid[u, v] != -1:
+            elif self.board.grid[u,v] != -1:
                 self.board_collision = True
-        return board_collision
+        return self.board_collision
 
 
 def rotate_blocks(blocks,r):
