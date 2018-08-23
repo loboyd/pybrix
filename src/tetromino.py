@@ -51,9 +51,11 @@ class Tetromino(object):
         self.undraw()
         self.position = (self.position[0], self.position[1]+1)
         # check for board collisions
+        self.check_board_collision()
         # undo drop if found
         if self.board_collision:
             self.position = (self.position[0], self.position[1]-1)
+            self.board_collision = False
             return False
         return True
 
@@ -86,6 +88,7 @@ class Tetromino(object):
         f.write("translate")
         if self.board_collision:
             self.position = (self.position[0]-t, self.position[1])
+            self.board_collision = False
             return False
         return True
 
@@ -93,6 +96,12 @@ class Tetromino(object):
         self.undraw()
         t = -1 if ccw else 1
         self.orientation = (self.orientation+t) % 4
+        self.check_board_collision()
+        if self.board_collision:
+            self.orientation = (self.orientation-t) % 4
+            self.board_collision = False
+            return False
+        return True
 
     def draw(self):
         blocks = self.get_block_positions()
@@ -111,15 +120,16 @@ class Tetromino(object):
     def check_board_collision(self):
         blocks = self.get_block_positions()
         f = open("testing.out","a")
+        f.write(str(self.board.shape[0]))
         for block in blocks:
             u,v = map(int,block)
-            f.write("\n")
-            f.write(str(u)+" " + str(v))
-            if u < 0 or u > self.board.shape[0]:
+            ushift = 3
+            f.write("\n"+str(u)+ " " + str(v))
+            if u < ushift or u >= (self.board.shape[1]+ushift):
                 self.board_collision = True
-            elif v < 0 or u > self.board.shape[1]:
+            elif v >= self.board.shape[0]:
                 self.board_collision = True
-            elif self.board.grid[u,v] != -1:
+            elif self.board.grid[v,u-ushift] != -1:
                 self.board_collision = True
         return self.board_collision
 
