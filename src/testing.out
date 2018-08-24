@@ -1,91 +1,73 @@
-New tetromino, type 3
-move left
-move left
-move left
-move left
-move left
-move left
-move left
-move left
-move left
-move left
-move left
-move left
-move left
-move left
-move left
-move left
-move left
-move left
-move left
-Collision at 4, 4
-move left
-move left
-Collision at 4, 4
-move left
-move left
-move left
-move left
-move left
-move left
-move left
-Collision at 12, 11
-move left
-move left
-move left
-move left
-move left
-move left
-move left
-move left
-move left
-move left
-move left
-move left
-move left
-move left
-move left
-move left
-move left
-move left
-move left
-Collision at 11, 18
-move left
-move left
-Collision at 12, 19
-Added to board at 10, 19
-Added to board at 11, 19
-Added to board at 12, 19
-Added to board at 12, 18
-New tetromino, type 6
-move left
-move left
-move left
-move left
-Collision at 11, 19
-move left
-Collision at 11, 19
-Added to board at 10, 17
-Added to board at 10, 18
-Added to board at 11, 17
-Added to board at 11, 18
-New tetromino, type 6
-Collision at 10, 17
-Collision at 10, 17
-Added to board at 9, 15
-Added to board at 9, 16
-Added to board at 10, 15
-Added to board at 10, 16
-New tetromino, type 2
-move left
-move left
-Collision at 5, 20
-move left
-Collision at 4, 19
-move left
-Collision at 5, 20
-Added to board at 3, 18
+New tetromino, type 0
+Collision at 6, 19
+Collision at 6, 19
+Collision at 6, 19
 Added to board at 4, 19
+Added to board at 5, 19
+Added to board at 5, 18
+Added to board at 6, 18
+New tetromino, type 6
+Collision at 6, 18
+Collision at 6, 18
+Collision at 6, 18
+Collision at 6, 18
+Collision at 6, 18
+Added to board at 5, 16
+Added to board at 5, 17
+Added to board at 6, 16
+Added to board at 6, 17
+New tetromino, type 1
+Collision at 7, 16
+New tetromino, type 2
+Collision at 6, 20
+Collision at 6, 20
 Added to board at 4, 18
 Added to board at 5, 19
+Added to board at 5, 18
+Added to board at 6, 19
+New tetromino, type 4
+Collision at 6, 18
+Collision at 6, 18
+Added to board at 4, 17
+Added to board at 5, 17
+Added to board at 4, 16
+Added to board at 6, 17
 New tetromino, type 3
+Collision at 6, 15
+Collision at 6, 15
+Collision at 6, 15
+Added to board at 4, 15
+Added to board at 5, 15
+Added to board at 6, 15
+Added to board at 6, 14
+New tetromino, type 4
+Collision at 6, 14
+Collision at 6, 14
+Added to board at 4, 13
+Added to board at 5, 13
+Added to board at 4, 12
+Added to board at 6, 13
+New tetromino, type 2
+Collision at 6, 13
+Collision at 6, 13
+Collision at 6, 13
+Added to board at 4, 11
+Added to board at 5, 12
+Added to board at 5, 11
+Added to board at 6, 12
+New tetromino, type 4
+Collision at 6, 11
+Collision at 6, 11
+Added to board at 4, 10
+Added to board at 5, 10
+Added to board at 4, 9
+Added to board at 6, 10
+New tetromino, type 6
+Collision at 6, 10
+Collision at 6, 10
+Collision at 6, 10
+Added to board at 5, 8
+Added to board at 5, 9
+Added to board at 6, 8
+Added to board at 6, 9
+New tetromino, type 4

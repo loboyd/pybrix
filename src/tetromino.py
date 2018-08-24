@@ -62,6 +62,7 @@ class Tetromino(object):
     def droppp(self):
         """advance tetromino by all rows"""
         self.undraw()
+        n = 0
         while 1:
             self.position = (self.position[0], self.position[1]+1)
             # check for board collisions
@@ -70,7 +71,8 @@ class Tetromino(object):
             if self.board_collision:
                 self.position = (self.position[0], self.position[1]-1)
                 self.board_collision = False
-                return False
+                return n
+            n+=1
 
     def get_block_positions(self):
         """returns a list of all board locations used by a tetromino
@@ -153,6 +155,14 @@ class Tetromino(object):
             f = open("testing.out","a")
             f.write("Added to board at " + str(u) + ", " + str(v) + "\n")
         return;
+
+    def check_lose(self):
+        blocks = self.get_block_positions()
+        for block in blocks:
+            u,v = map(int,block)
+            if v<0:
+                return True
+        return False;
             
 
 
