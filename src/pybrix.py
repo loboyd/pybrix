@@ -6,6 +6,7 @@ import pygame
 import sys
 import os
 import tetromino as tet
+import display
 from random import randint
 
 # add src to path before import pybrix stuff
@@ -23,7 +24,7 @@ def init():
     pygame.init()
     pygame.font.init()
     f = open("testing.out", "w")
-    #f.write("123")
+    f.write("")
 
 def main():
     init()
@@ -40,7 +41,7 @@ def main():
     screen = pygame.display.set_mode((600, 1000))
     clock = pygame.time.Clock()
     done = False
-    state = enum('MENU','INIT','NEWPIECE','MOVEDOWN','MOTION','CHECKLOSE','CLEARROWS')
+    state = enum('MENU','INIT','NEWPIECE','MOVEDOWN','MOTION','CLEARROWS')
     current_state = state.MENU
     score = 0
     upcoming_tets = []
@@ -69,6 +70,8 @@ def state_init():   # Should start game: display empty board, reset score, show 
     global current_state
     global score
     global b
+    global upcoming_tets
+    upcoming_tets = []
     textsurface = myfont.render('Init', False, (100, 100, 100),(0,0,255))
     screen.blit(textsurface,(0,0))
     # board = blank_board()
@@ -82,6 +85,7 @@ def state_init():   # Should start game: display empty board, reset score, show 
     #    for j in range(b.shape[1]):
     #        b.grid[i, j] = sample([0,1,2,3,4,5,6],1)[0]
     b.draw()
+    display.draw_score(screen, score)
     push_upcoming_tet(upcoming_tets, b, screen)
     push_upcoming_tet(upcoming_tets, b, screen)
     push_upcoming_tet(upcoming_tets, b, screen)
@@ -108,7 +112,7 @@ def state_newpiece():   # Should place random new piece above top row of board, 
 def pop_upcoming_tet(upcoming_tets):
     f = open("testing.out","a")
     s = upcoming_tets.pop(0)
-    f.write("\n"+str(s.shape))
+    f.write("New tetromino, type " + str(s.shape) + "\n")
     return s;
 
 def state_movedown():   # Should move active piece down one row
@@ -120,25 +124,32 @@ def state_movedown():   # Should move active piece down one row
         active_tet.draw()
         current_state+=1
     else:
-        current_state = state.NEWPIECE
-        active_tet.add_to_board()
-        b.draw()
+        if active_tet.check_lose():
+            #render_loss_message()
+            current_state = state.MENU
+        else:
+            current_state = state.NEWPIECE
+            active_tet.add_to_board()
+            b.draw()
     return;
 
 def state_motion():     # Should respond to user instructions: translate, rotate, drop pieces
     global current_state
+    global score
+    global fall_speed
     textsurface = myfont.render('Motion', False, (0, 0, 0),(0,0,255))
     screen.blit(textsurface,(0,0))
     current_state = state.MOVEDOWN
     clk = pygame.time.get_ticks()
+    a = 0
     while pygame.time.get_ticks() - clk < fall_speed:
         for event in pygame.event.get():
             if event.type == pygame.QUIT or (event.type == pygame.KEYDOWN and event.key == pygame.K_q):
                 done = True
-            elif event.type == pygame.KEYDOWN and event.key == pygame.K_LEFT:
-                active_tet.translate(0)
-            elif event.type == pygame.KEYDOWN and event.key == pygame.K_RIGHT:
-                active_tet.translate(1)
+            #elif event.type == pygame.KEYDOWN and event.key == pygame.K_LEFT:
+            #    active_tet.translate(0)
+            #elif event.type == pygame.KEYDOWN and event.key == pygame.K_RIGHT:
+            #    active_tet.translate(1)
             elif event.type == pygame.KEYDOWN and event.key == pygame.K_z:
                 active_tet.rotate(1)
             elif event.type == pygame.KEYDOWN and event.key == pygame.K_x:
@@ -146,23 +157,40 @@ def state_motion():     # Should respond to user instructions: translate, rotate
             elif event.type == pygame.KEYDOWN and event.key == pygame.K_DOWN:
                 active_tet.drop()
             elif event.type == pygame.KEYDOWN and event.key == pygame.K_SPACE:
-                active_tet.droppp()
+                score += active_tet.droppp()
                 #current_state = state.CLEARROWS
-            b.draw()
-            active_tet.draw()
-            pygame.display.flip()
-    return;
-
-def state_checklose():      # Should check if active piece rested above top (and top row not full)
-    global current_state
-    textsurface = myfont.render('Check Lose', False, (0, 0, 0),(0,0,255))
-    screen.blit(textsurface,(0,0))
-    # if active_piece.checkLose() and !(board.rowFull(board.nrows-1)):
-    #   display_loss_message()
-    #   current_state = state_MENU
-    # else:
-    #   current_state = state_CLEARROWS
-    current_state+=1
+        keys_pressed = pygame.key.get_pressed()
+        if keys_pressed[pygame.K_LEFT]:
+            f = open("testing.out","a")
+            f.write("move left\n")
+            if a:
+                active_tet.translate(0)
+                pygame.time.delay(200)
+                a = 0 
+            else:
+                a = 1
+        if keys_pressed[pygame.K_RIGHT]:
+            if a:
+                active_tet.translate(1)
+                pygame.time.delay(200)
+                a = 0 
+            else:
+                a = 1
+        if keys_pressed[pygame.K_r]:
+            if a:
+                current_state = state.INIT
+                pygame.time.delay(200)
+                a = 0 
+            else:
+                a = 1
+        b.draw()
+        active_tet.draw()
+        pygame.display.flip()
+        keys_pressed = pygame.key.get_pressed()
+        display.draw_score(screen, score)
+        level = int(score/1000)+1
+        display.draw_level(screen, level)
+        fall_speed = 200 + 800/level
     return;
 
 def state_clearrows():      # Clear filled rows and drop bulk accordingly
@@ -188,7 +216,6 @@ def state_execute(argument):
         state.NEWPIECE: state_newpiece,
         state.MOVEDOWN: state_movedown,
         state.MOTION: state_motion,
-        state.CHECKLOSE: state_checklose,
         state.CLEARROWS: state_clearrows, 
     }
     func = switcher.get(argument, lambda: "nothing")

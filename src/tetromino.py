@@ -10,8 +10,8 @@ from settings import GRID_SIZE, COLORS
 
 # other blocks relative to `position` block
 BLOCKS = [
-    ((-1., 0.), (0.,0.), ( 1., 0.), (2., 0.)), # 1x4
     ((-1., 0.), (0.,0.), ( 0.,-1.), (1.,-1.)), # S
+    ((-1., 0.), (0.,0.), ( 1., 0.), (2., 0.)), # 1x4
     ((-1.,-1.), (0.,0.), ( 0.,-1.), (1., 0.)), # S'
     ((-1., 0.), (0.,0.), ( 1., 0.), (1.,-1.)), # L
     ((-1., 0.), (0.,0.), (-1.,-1.), (1., 0.)), # L'
@@ -62,6 +62,7 @@ class Tetromino(object):
     def droppp(self):
         """advance tetromino by all rows"""
         self.undraw()
+        n = 0
         while 1:
             self.position = (self.position[0], self.position[1]+1)
             # check for board collisions
@@ -70,7 +71,8 @@ class Tetromino(object):
             if self.board_collision:
                 self.position = (self.position[0], self.position[1]-1)
                 self.board_collision = False
-                return False
+                return n
+            n+=1
 
     def get_block_positions(self):
         """returns a list of all board locations used by a tetromino
@@ -137,8 +139,11 @@ class Tetromino(object):
                 self.board_collision = True
             elif v >= self.board.shape[0]:
                 self.board_collision = True
-            elif self.board.grid[v,u-ushift] != -1:
+            elif v>=0 and self.board.grid[v,u-ushift] != -1:
                 self.board_collision = True
+        if self.board_collision:
+            f = open("testing.out","a")
+            f.write("Collision at " + str(u) + ", " + str(v) + "\n")
         return self.board_collision
 
     def add_to_board(self):
@@ -147,7 +152,17 @@ class Tetromino(object):
         for block in blocks:
             u,v = map(int,block)
             self.board.grid[v,u-ushift] = self.shape
+            f = open("testing.out","a")
+            f.write("Added to board at " + str(u) + ", " + str(v) + "\n")
         return;
+
+    def check_lose(self):
+        blocks = self.get_block_positions()
+        for block in blocks:
+            u,v = map(int,block)
+            if v<0:
+                return True
+        return False;
             
 
 
