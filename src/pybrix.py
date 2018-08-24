@@ -1,6 +1,7 @@
+#!/usr/bin/env python3
 """Main game logic for Pybrix
 
-2018.08.20  --  GVG"""
+2018.08.23  --  GVG"""
 
 import pygame
 import sys
