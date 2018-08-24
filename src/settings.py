@@ -17,3 +17,5 @@ COLORS = [
 
 BOARD_SIZE = (20, 10)
 
+BORDER_SIZE = 1
+
