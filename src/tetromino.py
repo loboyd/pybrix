@@ -137,8 +137,11 @@ class Tetromino(object):
                 self.board_collision = True
             elif v >= self.board.shape[0]:
                 self.board_collision = True
-            elif self.board.grid[v,u-ushift] != -1:
+            elif v>=0 and self.board.grid[v,u-ushift] != -1:
                 self.board_collision = True
+        if self.board_collision:
+            f = open("testing.out","a")
+            f.write("Collision at " + str(u) + ", " + str(v) + "\n")
         return self.board_collision
 
     def add_to_board(self):
@@ -147,6 +150,8 @@ class Tetromino(object):
         for block in blocks:
             u,v = map(int,block)
             self.board.grid[v,u-ushift] = self.shape
+            f = open("testing.out","a")
+            f.write("Added to board at " + str(u) + ", " + str(v) + "\n")
         return;
             
 

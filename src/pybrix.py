@@ -23,7 +23,7 @@ def init():
     pygame.init()
     pygame.font.init()
     f = open("testing.out", "w")
-    #f.write("123")
+    f.write("")
 
 def main():
     init()
@@ -108,7 +108,7 @@ def state_newpiece():   # Should place random new piece above top row of board, 
 def pop_upcoming_tet(upcoming_tets):
     f = open("testing.out","a")
     s = upcoming_tets.pop(0)
-    f.write("\n"+str(s.shape))
+    f.write("New tetromino, type " + str(s.shape) + "\n")
     return s;
 
 def state_movedown():   # Should move active piece down one row
@@ -131,14 +131,15 @@ def state_motion():     # Should respond to user instructions: translate, rotate
     screen.blit(textsurface,(0,0))
     current_state = state.MOVEDOWN
     clk = pygame.time.get_ticks()
+    a = 0
     while pygame.time.get_ticks() - clk < fall_speed:
         for event in pygame.event.get():
             if event.type == pygame.QUIT or (event.type == pygame.KEYDOWN and event.key == pygame.K_q):
                 done = True
-            elif event.type == pygame.KEYDOWN and event.key == pygame.K_LEFT:
-                active_tet.translate(0)
-            elif event.type == pygame.KEYDOWN and event.key == pygame.K_RIGHT:
-                active_tet.translate(1)
+            #elif event.type == pygame.KEYDOWN and event.key == pygame.K_LEFT:
+            #    active_tet.translate(0)
+            #elif event.type == pygame.KEYDOWN and event.key == pygame.K_RIGHT:
+            #    active_tet.translate(1)
             elif event.type == pygame.KEYDOWN and event.key == pygame.K_z:
                 active_tet.rotate(1)
             elif event.type == pygame.KEYDOWN and event.key == pygame.K_x:
@@ -148,9 +149,27 @@ def state_motion():     # Should respond to user instructions: translate, rotate
             elif event.type == pygame.KEYDOWN and event.key == pygame.K_SPACE:
                 active_tet.droppp()
                 #current_state = state.CLEARROWS
-            b.draw()
-            active_tet.draw()
-            pygame.display.flip()
+        keys_pressed = pygame.key.get_pressed()
+        if keys_pressed[pygame.K_LEFT]:
+            f = open("testing.out","a")
+            f.write("move left\n")
+            if a:
+                active_tet.translate(0)
+                pygame.time.delay(200)
+                a = 0 
+            else:
+                a = 1
+        if keys_pressed[pygame.K_RIGHT]:
+            if a:
+                active_tet.translate(1)
+                pygame.time.delay(200)
+                a = 0 
+            else:
+                a = 1
+        b.draw()
+        active_tet.draw()
+        pygame.display.flip()
+        keys_pressed = pygame.key.get_pressed()
     return;
 
 def state_checklose():      # Should check if active piece rested above top (and top row not full)
