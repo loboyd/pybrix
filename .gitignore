@@ -2,3 +2,4 @@
 src/test.py
 src/main.py
 *.swp
+src/*.out

@@ -24,3 +24,17 @@ class Board(object):
                 #if board_val > -1:
                 display.draw_block(self.screen, pos, color, border=True)
 
+    def clear_rows(self):
+        """clears completed rows"""
+        shift = 0  # no. of rows to move down
+        for i in range(self.shape[0]-1, -1, -1):
+            row = self.grid[i,:]
+            # if row has 1+ empty space(s), shift down correct no. of rows
+            if -1 not in row:
+                shift += 1
+            else:
+                self.grid[i+shift,:] = row
+
+        # fill in blank rows at the top
+        self.grid[i:i+shift,:] = -1
+
