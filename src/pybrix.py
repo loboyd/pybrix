@@ -69,6 +69,7 @@ def state_menu():   # Should display main menu and check for input on menu optio
 def state_init():   # Should start game: display empty board, reset score, show first pieces
     global current_state
     global score
+    global level
     global b
     global upcoming_tets
     upcoming_tets = []
@@ -80,7 +81,7 @@ def state_init():   # Should start game: display empty board, reset score, show 
     # push_upcoming_piece() x3
     b = Board(screen)
     score = 0
-
+    level = 1
     #for i in range(b.shape[0]):
     #    for j in range(b.shape[1]):
     #        b.grid[i, j] = sample([0,1,2,3,4,5,6],1)[0]
@@ -128,7 +129,7 @@ def state_movedown():   # Should move active piece down one row
             #render_loss_message()
             current_state = state.MENU
         else:
-            current_state = state.NEWPIECE
+            current_state = state.CLEARROWS
             active_tet.add_to_board()
             b.draw()
     return;
@@ -137,12 +138,14 @@ def state_motion():     # Should respond to user instructions: translate, rotate
     global current_state
     global score
     global fall_speed
+    global done
     textsurface = myfont.render('Motion', False, (0, 0, 0),(0,0,255))
     screen.blit(textsurface,(0,0))
     current_state = state.MOVEDOWN
     clk = pygame.time.get_ticks()
     a = 0
-    while pygame.time.get_ticks() - clk < fall_speed:
+    dropped = 0
+    while pygame.time.get_ticks() - clk < fall_speed and not dropped:
         for event in pygame.event.get():
             if event.type == pygame.QUIT or (event.type == pygame.KEYDOWN and event.key == pygame.K_q):
                 done = True
@@ -154,11 +157,12 @@ def state_motion():     # Should respond to user instructions: translate, rotate
                 active_tet.rotate(1)
             elif event.type == pygame.KEYDOWN and event.key == pygame.K_x:
                 active_tet.rotate(0)
-            elif event.type == pygame.KEYDOWN and event.key == pygame.K_DOWN:
+            #elif event.type == pygame.KEYDOWN and event.key == pygame.K_DOWN:
                 active_tet.drop()
             elif event.type == pygame.KEYDOWN and event.key == pygame.K_SPACE:
-                score += active_tet.droppp()
-                #current_state = state.CLEARROWS
+                t = active_tet.droppp()
+                score+=t
+                dropped = 1
         keys_pressed = pygame.key.get_pressed()
         if keys_pressed[pygame.K_LEFT]:
             f = open("testing.out","a")
@@ -172,14 +176,21 @@ def state_motion():     # Should respond to user instructions: translate, rotate
         if keys_pressed[pygame.K_RIGHT]:
             if a:
                 active_tet.translate(1)
-                pygame.time.delay(200)
+                pygame.time.delay(100)
+                a = 0 
+            else:
+                a = 1
+        if keys_pressed[pygame.K_DOWN]:
+            if a:
+                active_tet.drop()
+                pygame.time.delay(100)
                 a = 0 
             else:
                 a = 1
         if keys_pressed[pygame.K_r]:
             if a:
                 current_state = state.INIT
-                pygame.time.delay(200)
+                pygame.time.delay(100)
                 a = 0 
             else:
                 a = 1
@@ -194,15 +205,14 @@ def state_motion():     # Should respond to user instructions: translate, rotate
     return;
 
 def state_clearrows():      # Clear filled rows and drop bulk accordingly
+    rowscores = [0, 40, 100, 300, 1200]
     global current_state
+    global score
     textsurface = myfont.render('Clear Rows', False, (0, 0, 0),(0,0,255))
     screen.blit(textsurface,(0,0))
-    # for x in range(0, board.nrows):
-    #   if board.rowFull(x):
-    #       board.clearRow(x)
-    #   else:   x+=1
-    # current_state = state_NEWPIECE
-    current_state += 1    
+    numrows = b.clear_rows()
+    current_state = state.NEWPIECE   
+    score += rowscores[numrows]*(level+1)
     return;
 
 def enum(*args):

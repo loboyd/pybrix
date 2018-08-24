@@ -37,4 +37,5 @@ class Board(object):
 
         # fill in blank rows at the top
         self.grid[i:i+shift,:] = -1
+        return int(shift)
 
