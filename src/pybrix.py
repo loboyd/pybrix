@@ -149,7 +149,7 @@ def state_motion():     # Should respond to user instructions: translate, rotate
             #    active_tet.translate(1)
             elif event.type == pygame.KEYDOWN and event.key == pygame.K_z:
                 active_tet.rotate(1)
-            elif event.type == pygame.KEYDOWN and event.key == pygame.K_x:
+            elif event.type == pygame.KEYDOWN and (event.key == pygame.K_x or event.key == pygame.K_UP):
                 active_tet.rotate(0)
             #elif event.type == pygame.KEYDOWN and event.key == pygame.K_DOWN:
                 active_tet.drop()
