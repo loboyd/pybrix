@@ -21,8 +21,11 @@ class Board(object):
                 pos = (j+3, i)
                 board_val = self.grid[i, j]
                 color = COLORS[board_val]
-                #if board_val > -1:
-                display.draw_block(self.screen, pos, color, border=True)
+                if board_val > -1:
+                    display.draw_block(self.screen, pos, color)
+                else:
+                    gray = (64,64,64)  # gray border
+                    display.draw_block(self.screen, pos, color, radius=0, border=gray, fancy=False)
 
     def clear_rows(self):
         """clears completed rows"""

@@ -2,6 +2,8 @@
 
 2018.08.20  --  L. Boyd"""
 
+from math import sqrt
+
 import numpy as np
 import pygame
 
@@ -21,13 +23,14 @@ def draw_block_old(screen, position, color, border=False):
         s -= 4
     pygame.draw.rect(screen, color, pygame.Rect(row,col,s,s))
 
-def draw_block(screen, position, color, radius=0.3, interior=False, s=GRID_SIZE, border=None):
+def draw_block(screen, position, color, radius=0.3, s=GRID_SIZE, border=(255,255,255), fancy=True):
 # def draw_fancy_block(screen, position, color, r, border=False):
     """draw single square with rounded corners (radius r) to the screen"""
     if radius < 0 or radius > 1:
         raise ValueError('radius must be between 0 and 1')
 
-    color_tmp = (255,255,255)
+    color_tmp = border
+
     row = int(s*position[0])
     col = int(s*position[1])
     r = int(radius*s/4)  # maximum radius which doesn't go outside the square block
@@ -50,14 +53,17 @@ def draw_block(screen, position, color, radius=0.3, interior=False, s=GRID_SIZE,
 
     # draw highlight onto block surface
     # color_tmp = color_avg(color_tmp, (0,0,0))
-    corner1 = (row+r,   col+r)
-    corner2 = (row+r,   col-r+s)
-    corner3 = (row-r+s, col-r+s)
-    corner4 = (row-r+s, col+r)
-    pygame.draw.line(screen, (  0,  0,  0), corner1, corner2)
-    pygame.draw.line(screen, (  0,  0,  0), corner2, corner3)
-    pygame.draw.line(screen, (255,255,255), corner3, corner4)
-    pygame.draw.line(screen, (255,255,255), corner4, corner1)
+    if fancy:
+        highlight = (  0  ,0,  0)
+        shadow    = (255,255,255)
+        corner1 = (row+r,   col+r)
+        corner2 = (row+r,   col-r+s)
+        corner3 = (row-r+s, col-r+s)
+        corner4 = (row-r+s, col+r)
+        pygame.draw.line(screen, (  0,  0,  0), corner1, corner2)
+        pygame.draw.line(screen, (  0,  0,  0), corner2, corner3)
+        pygame.draw.line(screen, (255,255,255), corner3, corner4)
+        pygame.draw.line(screen, (255,255,255), corner4, corner1)
 
 
 def clear_screen(screen):
@@ -81,3 +87,4 @@ def draw_level(screen, level, border=False):
     pygame.draw.rect(screen, white, pygame.Rect(5, GRID_SIZE*BOARD_SIZE[0]+110, 7*GRID_SIZE, 2*GRID_SIZE))
     textsurface = myfont.render("Level:  " + str(level), False, (100, 100, 100),(255,255,255))
     screen.blit(textsurface,(5,GRID_SIZE*BOARD_SIZE[0]+130))
+

@@ -120,7 +120,7 @@ class Tetromino(object):
         blocks = self.get_block_positions()
         color = COLORS[self.shape]
         for block in blocks:
-            display.draw_block(self.screen, block, color, border=True)
+            display.draw_block(self.screen, block, color)
         self.is_drawn = True
 
     def undraw(self):
