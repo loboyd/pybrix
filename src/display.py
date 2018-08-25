@@ -21,7 +21,7 @@ def draw_block_old(screen, position, color, border=False):
         s -= 4
     pygame.draw.rect(screen, color, pygame.Rect(row,col,s,s))
 
-def draw_block(screen, position, color, radius=0.5, interior=False, s=GRID_SIZE, border=None):
+def draw_block(screen, position, color, radius=0.3, interior=False, s=GRID_SIZE, border=None):
 # def draw_fancy_block(screen, position, color, r, border=False):
     """draw single square with rounded corners (radius r) to the screen"""
     if radius < 0 or radius > 1:
@@ -32,8 +32,6 @@ def draw_block(screen, position, color, radius=0.5, interior=False, s=GRID_SIZE,
     col = int(s*position[1])
     r = int(radius*s/4)  # maximum radius which doesn't go outside the square block
     for i in range(2):
-        # draw_block(screen, position, (255,255,255), radius=radius,interior=True)
-
         # draw the four corner circles
         pygame.draw.circle(screen, color_tmp, (row+r  ,col+r  ), r)
         pygame.draw.circle(screen, color_tmp, (row+r  ,col-r+s), r)
@@ -49,6 +47,18 @@ def draw_block(screen, position, color, radius=0.5, interior=False, s=GRID_SIZE,
         col += 1
         s -= 2
         color_tmp = color
+
+    # draw highlight onto block surface
+    # color_tmp = color_avg(color_tmp, (0,0,0))
+    corner1 = (row+r,   col+r)
+    corner2 = (row+r,   col-r+s)
+    corner3 = (row-r+s, col-r+s)
+    corner4 = (row-r+s, col+r)
+    pygame.draw.line(screen, (  0,  0,  0), corner1, corner2)
+    pygame.draw.line(screen, (  0,  0,  0), corner2, corner3)
+    pygame.draw.line(screen, (255,255,255), corner3, corner4)
+    pygame.draw.line(screen, (255,255,255), corner4, corner1)
+
 
 def clear_screen(screen):
     """draw one huge black block over the screen
