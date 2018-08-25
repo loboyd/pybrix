@@ -10,15 +10,8 @@ import tetromino as tet
 import display
 from random import randint
 
-# add src to path before import pybrix stuff
-cwd = os.getcwd()[:-4]
-print(cwd)
-sys.path.insert(0, cwd)
-sys.path.insert(0, cwd+'/src')
-
-from src.board import Board
-from src.settings import GRID_SIZE, COLORS
-
+from board import Board
+from settings import GRID_SIZE, COLORS
 
 def init():
     global f
@@ -49,7 +42,7 @@ def main():
     fall_speed = 1000
     while not done:
         screen.fill((100, 100, 100))
-        state_execute(current_state)             
+        state_execute(current_state)
         pygame.display.flip()
         #screen.fill((0, 0, 0))
 
@@ -171,28 +164,28 @@ def state_motion():     # Should respond to user instructions: translate, rotate
             if a:
                 active_tet.translate(0)
                 pygame.time.delay(200)
-                a = 0 
+                a = 0
             else:
                 a = 1
         if keys_pressed[pygame.K_RIGHT]:
             if a:
                 active_tet.translate(1)
                 pygame.time.delay(100)
-                a = 0 
+                a = 0
             else:
                 a = 1
         if keys_pressed[pygame.K_DOWN]:
             if a:
                 active_tet.drop()
                 pygame.time.delay(100)
-                a = 0 
+                a = 0
             else:
                 a = 1
         if keys_pressed[pygame.K_r]:
             if a:
                 current_state = state.INIT
                 pygame.time.delay(100)
-                a = 0 
+                a = 0
             else:
                 a = 1
         b.draw()
@@ -212,7 +205,7 @@ def state_clearrows():      # Clear filled rows and drop bulk accordingly
     textsurface = myfont.render('Clear Rows', False, (0, 0, 0),(0,0,255))
     screen.blit(textsurface,(0,0))
     numrows = b.clear_rows()
-    current_state = state.NEWPIECE   
+    current_state = state.NEWPIECE
     score += rowscores[numrows]*(level+1)
     return;
 
@@ -227,7 +220,7 @@ def state_execute(argument):
         state.NEWPIECE: state_newpiece,
         state.MOVEDOWN: state_movedown,
         state.MOTION: state_motion,
-        state.CLEARROWS: state_clearrows, 
+        state.CLEARROWS: state_clearrows,
     }
     func = switcher.get(argument, lambda: "nothing")
     return func()
