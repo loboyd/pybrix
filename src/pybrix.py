@@ -62,7 +62,7 @@ def state_menu():   # Should display main menu and check for input on menu optio
     # 
     for event in pygame.event.get():
             if event.type == pygame.QUIT or (event.type == pygame.KEYDOWN and event.key == pygame.K_q):
-                        done = True
+                done = True
             elif event.type == pygame.KEYDOWN and event.key == pygame.K_1:
                 current_state+=1
     return;
