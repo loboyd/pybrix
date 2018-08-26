@@ -117,6 +117,7 @@ class Tetromino(object):
         return True
 
     def draw(self, color=None, shadow=True):
+        """draw the current tetromino to the screen"""
         blocks = self.get_block_positions()
         if not color:
             self.draw_shadow()
@@ -126,6 +127,7 @@ class Tetromino(object):
         self.is_drawn = True
 
     def undraw(self):
+        """clear the tetromino from the screen"""
         if self.is_drawn:
             blocks = self.get_block_positions()
             for block in blocks:
@@ -133,11 +135,11 @@ class Tetromino(object):
             self.is_drawn = False
 
     def draw_shadow(self):
-        # def __init__(self, shape, board, screen, orientation=0, position=(5,-1)):
+        """draw the droppp-position of the tetromino"""
         shadow = Tetromino(self.shape, self.board, self.screen,
             self.orientation, self.position)
         shadow.droppp()
-        # average color with light gray to get shadow color
+        # to get shadow color, average original color with light gray 
         color = display.average_color(COLORS[self.shape], (180,180,180))
         shadow.draw(color, shadow=False)
 
