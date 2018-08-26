@@ -9,6 +9,7 @@ This list was created after the simplest initial game was built. This list will 
 - [ ] Compose and record background music in Tetris style
 - [ ] Adjust level system to make higher levels harder to reach
 - [ ] "Hard mode": wider board, faster speed, etc.
+- [x] Add "shadow" piece
 
 ## Surrounding Pieces
 - [ ] Build high-score tracker
