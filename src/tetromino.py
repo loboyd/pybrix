@@ -63,7 +63,7 @@ class Tetromino(object):
         """advance tetromino by all rows"""
         self.undraw()
         n = 0
-        while 1:
+        while True:
             self.position = (self.position[0], self.position[1]+1)
             # check for board collisions
             self.check_board_collision()
@@ -116,9 +116,11 @@ class Tetromino(object):
             return False
         return True
 
-    def draw(self):
+    def draw(self, color=None, shadow=True):
         blocks = self.get_block_positions()
-        color = COLORS[self.shape]
+        if not color:
+            self.draw_shadow()
+            color = COLORS[self.shape]
         for block in blocks:
             display.draw_block(self.screen, block, color)
         self.is_drawn = True
@@ -130,11 +132,20 @@ class Tetromino(object):
                 display.draw_block(self.screen, block, (0,0,0))
             self.is_drawn = False
 
+    def draw_shadow(self):
+        # def __init__(self, shape, board, screen, orientation=0, position=(5,-1)):
+        shadow = Tetromino(self.shape, self.board, self.screen,
+            self.orientation, self.position)
+        shadow.droppp()
+        # average color with light gray to get shadow color
+        color = display.average_color(COLORS[self.shape], (180,180,180))
+        shadow.draw(color, shadow=False)
+
     def check_board_collision(self):
         blocks = self.get_block_positions()
         for block in blocks:
-            u,v = map(int,block)
-            ushift = 3  
+            u,v = map(int, block)
+            ushift = 3
             if u < ushift or u >= (self.board.shape[1]+ushift):
                 self.board_collision = True
             elif v >= self.board.shape[0]:
@@ -163,7 +174,6 @@ class Tetromino(object):
             if v<0:
                 return True
         return False;
-            
 
 
 def rotate_blocks(blocks,r):
@@ -181,3 +191,4 @@ def rotate_blocks(blocks,r):
         elif r == 3:
             blocks[i] = (block[1],-block[0])
     return blocks
+

@@ -88,3 +88,10 @@ def draw_level(screen, level, border=False):
     textsurface = myfont.render("Level:  " + str(level), False, (100, 100, 100),(255,255,255))
     screen.blit(textsurface,(5,GRID_SIZE*BOARD_SIZE[0]+130))
 
+def average_color(color1, color2):
+    color1 = [i**2 for i in color1]
+    color2 = [i**2 for i in color2]
+    color  = [(color1[i]+color2[i])/2 for i in range(3)]
+    color  = [int(sqrt(i)) for i in color]
+    return color
+
