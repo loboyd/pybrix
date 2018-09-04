@@ -6,3 +6,6 @@ a simple implementation of Tetris in Python
 ## dependencies
 - NumPy
 - PyGame
+
+### platforms
+Has been run on Linux and OSX. It should run on Windows, but it hasn't been tested.
